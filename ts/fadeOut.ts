@@ -1,24 +1,32 @@
+interface FadeOutOptions {
+  ease: 'ease-in' | 'ease-out' | 'ease-in-out';
+  delay: number;
+  checkState: boolean;
+}
+
 interface Element {
+  fadeOut: (time?: number | string, options?: Partial<FadeOutOptions>) => Promise<Element | null>;
   playState?: AnimationPlayState;
-  fadeOut(time?: number | string, options?: KeyframeAnimationOptions, checkState?: boolean): Promise<Element | null>;
 }
 
 Element.prototype.fadeOut = async function (
   time: number | string = 0.5,
-  options?: KeyframeAnimationOptions,
-  checkState: boolean = false
+  options: Partial<FadeOutOptions> = {}
 ): Promise<Element | null> {
   if (this.playState === 'running') return null;
 
+  const { ease: easing, delay = 0, checkState = false } = options;
+
   typeof time === 'string' && !isNaN(+time) && (time = +time);
 
-  let target: string = this.className || this.id || this.tagName;
+  let target = this.className || this.id || this.tagName;
 
   try {
-    const ani: Animation = this.animate([{ opacity: 1 }, { opacity: 0 }], {
+    const ani = this.animate([{ opacity: 1 }, { opacity: 0 }], {
       duration: (time as number) * 1000,
       fill: 'both',
-      ...options,
+      easing: easing,
+      delay: delay,
     });
 
     this.playState = ani.playState;
@@ -33,6 +41,6 @@ Element.prototype.fadeOut = async function (
     return this;
   } catch (error) {
     throw new Error(`Please enter the parameter value in the correct format..👀
-      \n Current parameters => time: ${time}, options: ${JSON.stringify(options)}, checkState: ${checkState}`);
+           \n Current parameters => time: ${time}, options: ${JSON.stringify(options)}, checkState: ${checkState}`);
   }
 };
