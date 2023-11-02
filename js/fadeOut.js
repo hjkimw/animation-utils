@@ -3,9 +3,9 @@
  * @param {number | string} time - fadeOut 진행 시간
  * @param {{easing?: string, delay?: number}} options - fadeOut에 easing, delay 추가 애니메이션 옵션 설정
  * @param {boolean} checkState - fadeOut 진행 상태 로그 출력 on/off
- * @returns {Promise<HTMLElement | null>}
+ * @returns {Promise<Element | null>}
  */
-HTMLElement.prototype.fadeOut = async function (time = 0.5, options = {}, checkState = false) {
+Element.prototype.fadeOut = async function (time = 0.5, options = {}, checkState = false) {
   if (this.playState === 'running') return;
 
   typeof time === 'string' && !isNaN(+time) && (time = +time);
@@ -25,13 +25,12 @@ HTMLElement.prototype.fadeOut = async function (time = 0.5, options = {}, checkS
     await ani.finished;
 
     this.playState = ani.playState;
-    checkState && console.log(`${target} is fadeOut ${this.playState}! ✅`);
-
     this.remove();
+    checkState && console.log(`${target} is fadeOut ${this.playState}! ✅`);
 
     return this;
   } catch (error) {
-    throw `Please enter the parameter value in the correct format..👀
-           \n Current parameters: ${time}`;
+    throw new Error(`Please enter the parameter value in the correct format..👀
+           \n Current parameters => time: ${time}, options: ${JSON.stringify(options)}, checkState: ${checkState}`);
   }
 };

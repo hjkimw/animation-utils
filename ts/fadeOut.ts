@@ -1,17 +1,13 @@
-interface HTMLElement {
+interface Element {
   playState?: AnimationPlayState;
-  fadeOut(
-    time?: number | string,
-    options?: KeyframeAnimationOptions,
-    checkState?: boolean
-  ): Promise<HTMLElement | null>;
+  fadeOut(time?: number | string, options?: KeyframeAnimationOptions, checkState?: boolean): Promise<Element | null>;
 }
 
-HTMLElement.prototype.fadeOut = async function (
+Element.prototype.fadeOut = async function (
   time: number | string = 0.5,
   options?: KeyframeAnimationOptions,
   checkState: boolean = false
-): Promise<HTMLElement | null> {
+): Promise<Element | null> {
   if (this.playState === 'running') return null;
 
   typeof time === 'string' && !isNaN(+time) && (time = +time);
@@ -31,12 +27,12 @@ HTMLElement.prototype.fadeOut = async function (
     await ani.finished;
 
     this.playState = ani.playState;
+    this.remove();
     checkState && console.log(`${target} is fadeOut ${this.playState}! ✅`);
 
-    this.remove();
     return this;
   } catch (error) {
-    throw `Please enter the parameter value in the correct format..👀
-           \n Current parameters: ${time}`;
+    throw new Error(`Please enter the parameter value in the correct format..👀
+      \n Current parameters => time: ${time}, options: ${JSON.stringify(options)}, checkState: ${checkState}`);
   }
 };
