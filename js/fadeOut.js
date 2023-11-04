@@ -7,7 +7,7 @@
 Element.prototype.fadeOut = async function (time = 0.5, options = {}) {
   if (this.playState === 'running') return;
 
-  const { ease: easing, delay = 0, checkState = false } = options;
+  const { ease: easing = 'ease-in', delay = 0, checkState = false } = options;
 
   typeof time === 'string' && !isNaN(+time) && (time = +time);
 

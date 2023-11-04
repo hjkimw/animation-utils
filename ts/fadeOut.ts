@@ -4,18 +4,20 @@ interface FadeOutOptions {
   checkState: boolean;
 }
 
-interface Element {
-  fadeOut: (time?: number | string, options?: Partial<FadeOutOptions>) => Promise<Element | null>;
-  playState?: AnimationPlayState;
+declare global {
+  interface HTMLElement {
+    fadeOut: (time?: number | string, options?: Partial<FadeOutOptions>) => Promise<Element | null>;
+    playState?: AnimationPlayState;
+  }
 }
 
-Element.prototype.fadeOut = async function (
+HTMLElement.prototype.fadeOut = async function (
   time: number | string = 0.5,
   options: Partial<FadeOutOptions> = {}
 ): Promise<Element | null> {
   if (this.playState === 'running') return null;
 
-  const { ease: easing, delay = 0, checkState = false } = options;
+  const { ease: easing = 'ease-in', delay = 0, checkState = false } = options;
 
   typeof time === 'string' && !isNaN(+time) && (time = +time);
 
