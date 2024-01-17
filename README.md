@@ -9,7 +9,14 @@
 서서히 사라지면서 해당 `Element` 요소를 제거합니다.
 
 ```javascript
+/**
+ *
+ * @param {number | string} time - fadeOut 진행 시간
+ * @param {{ease?: 'ease-in' | 'ease-out' | 'ease-in-out', delay?: number, checkState?: boolean}} options - {ease: 가속도, delay: 지연 시간, checkState: 시작/종료 상태 확인 }
+ * @returns {Promise<Element | null>}
+ */
 Element.fadeOut(time [, options]);
+
 ```
 
 ```javascript

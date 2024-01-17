@@ -5,13 +5,13 @@ interface FadeOutOptions {
 }
 
 declare global {
-  interface HTMLElement {
+  interface Element {
     fadeOut: (time?: number | string, options?: Partial<FadeOutOptions>) => Promise<Element | null>;
     playState?: AnimationPlayState;
   }
 }
 
-HTMLElement.prototype.fadeOut = async function (
+Element.prototype.fadeOut = async function (
   time: number | string = 0.5,
   options: Partial<FadeOutOptions> = {}
 ): Promise<Element | null> {
